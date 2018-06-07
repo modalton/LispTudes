@@ -1,0 +1,13 @@
+*LispTudes: Etudes to Programming in Lisp
+
+**Devil.lisp
+
+
+    You're playing a game with the Devil, with your soul at stake. You're sitting at a circular table which has 4 coins, arranged in a diamond, at the 12, 3, 6, and 9 o'clock positions. You are blindfolded, and can never see the coins or the table.
+
+    Your goal is to get all 4 coins showing heads, by telling the devil the position(s) of some coins to flip. We call this a "move" on your part. The Devil must faithfully perform the requested flips, but may first sneakily rotate the table any number of quarter-turns, so that the coins are in different positions. You keep making moves, and the Devil keeps rotating and flipping, until all 4 coins show heads.
+
+    Example: You tell the Devil to flip the 12 o'clock and 6 o'clock positions. The devil might rotate the table a quarter turn clockwiae, and then flip the coins that have moved into the 12 o'clock and 6 o'clock positions (which were formerly at 3 o'clock and 9 o'clock). Or the Devil could have made any other rotation before flipping.
+
+    What is a shortest sequence of moves that is guaranteed to win, no matter what the initial state of the coins, and no matter what rotations the Devil applies?
+
