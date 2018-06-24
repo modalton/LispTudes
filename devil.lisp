@@ -1,6 +1,9 @@
 
-(defun rotate-r (n lst)
-  (append (nthcdr n lst) (butlast lst (- (length lst) n))))
+;;(declaim (optimize (debug 3) (speed 0) (space 0)))
+(declaim (optimize (safety 1) (speed 3)))
+
+(defun rotate-str (str places)
+  (concatenate 'string (subseq str places) (subseq str 0 places)))
 
 (defun powerset (s) 
   (if s (mapcan (lambda (x) (list (cons (car s) x) x)) 
@@ -12,46 +15,84 @@
   (if (null list) '(nil)
       (let* ((a (car list))
              (d (cdr list))
-             (s (combos d))
+             (s (combinations d))
              (v (mapcar (lambda (x) (cons a x)) s)))
         (append s v))))
 
 
-(defun permutations (bag)
-  "Return a list of all the permutations of the input."
-  ;; If the input is nil, there is only one permutation:
-  ;; nil itself
-  (if (null bag)
-      '(())
-      ;; Otherwise, take an element, e, out of the bag.
-      ;; Generate all permutations of the remaining elements,
-      ;; And add e to the front of each of these.
-      ;; Do this for all possible e to generate all permutations.
-      (mapcan #'(lambda (e)
-                  (mapcar #'(lambda (p) (cons e p))
-                          (permutations
-                            (remove e bag :count 1 :test #'eq))))
-              bag))) 
+
+(defun all-coin-permutations (n)
+  (if (= n 1) '("H" "T")
+      (reduce (lambda (acc str) (append acc (list
+                                    (concatenate 'string "T" str)
+                                    (concatenate 'string "H" str))))
+          (all-coin-permutations (- n 1))
+          :initial-value '())
+      ))
+
+ 
 
 (defun generate-rotations (lst)
   (loop for i from 0 to (- (length lst) 1)
-     collect (rotate-r i lst)))
+     collect (rotate-str lst i)))
 
 
 
-
+;;Flip in specified positions, unless we have solution (all heads)
 (defun flip (str positions)
-  (if (string= str "HHHH")
-      (print "hereio")
+  (if (find #\T str)
       (mapcar #'(lambda (x)
                   (cond
                     ((char= #\T (char str x)) (setf (char str x) #\H))
                     (t (setf (char str x) #\T)))
                   ) positions))
   str)
+  
 
-(defun altering-flip (str positions)
- (mapcar #'(lambda (x)(setf (char str x) #\H)) positions)
-str)
+;; For each possible state generate all rotations. Then remove the duplicates
+;; and flip them with the move. We remove duplicates again bc you wouldn't flip
+;; "HHHH" bc the game would already be over
+(defun update (possible_states flips)
+  (remove-duplicates
+   (mapcar (lambda (coin_set) (flip coin_set flips))
+           (remove-duplicates
+            (reduce (lambda (acc coin_set)(append acc (generate-rotations coin_set)))
+                    possible_states
+                    :initial-value '())
+            :test #'string=))
+   :test #'string=
+   ))
+
+;;HHHH '((0 1 2 3)(0 2) (0 1 2 3) (0 1) (0 1 2 3) (0 2) (0 1 2 3) (0) (0 1 2 3) (0 2) (0 1 2 3) (0 1) (0 1 2 3) (0 2) (0 1 2 3))
+;;THTH TTTT '((3) (0 1 3) (1 3) (0 1 3) (0 1 2 3) (1 3) (1 2))
+(defun test (solution)
   
-  
+  (reduce (lambda (prev move) (update prev move)) solution :initial-value (all-coin-permutations 4))
+   )
+
+
+
+(defmacro push_end (lst elem)
+  (if (< 0 (length lst))
+      (push elem (cdr (last lst)))
+      (push elem lst)
+      ))
+
+
+(defun strategy_search (start goal actions result)
+  (let ((explored (list))  (queue (list (list '() start)) ))
+    (loop while queue
+       do (destructuring-bind (strategy cur_state) (pop queue)
+            (if (equal cur_state goal)  (return strategy))                     
+            (mapcar (lambda (action)
+                      (let ((next_states (sort  (funcall result cur_state action) #'string-lessp)))
+                       (if (not (member next_states explored :test #'equal))
+                           (progn
+                             (let ((next_q_elem (list (append strategy (list action)) next_states)))
+                               (if (< 0 (length queue))
+                                   (push next_q_elem (cdr (last queue)))
+                                   (push next_q_elem queue)))
+                             (setq explored (adjoin next_states explored :test #' equal)))))) actions)
+ 
+            )
+         )))
