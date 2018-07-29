@@ -1,6 +1,6 @@
-*LispTudes: Etudes to Programming in Lisp
+* LispTudes: Etudes to Programming in Lisp
 
-**Devil.lisp
+** Devil.lisp
 
 
     You're playing a game with the Devil, with your soul at stake. You're sitting at a circular table which has 4 coins, arranged in a diamond, at the 12, 3, 6, and 9 o'clock positions. You are blindfolded, and can never see the coins or the table.
@@ -11,3 +11,22 @@
 
     What is a shortest sequence of moves that is guaranteed to win, no matter what the initial state of the coins, and no matter what rotations the Devil applies?
 
+** Cheryl.lisp
+   
+
+    Albert and Bernard just became friends with Cheryl, and they want to know when her birthday is. Cheryl gave them a list of 10 possible dates:
+
+        May 15     May 16     May 19
+       June 17    June 18
+       July 14    July 16
+     August 14  August 15  August 17
+
+    Cheryl then tells Albert and Bernard separately the month and the day of the birthday respectively.
+
+    Albert: I don't know when Cheryl's birthday is, but I know that Bernard does not know too.
+
+    Bernard: At first I don't know when Cheryl's birthday is, but I know now.
+
+    Albert: Then I also know when Cheryl's birthday is.
+
+    So when is Cheryl's birthday?
