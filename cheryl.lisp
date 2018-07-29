@@ -15,7 +15,18 @@
   (= 1 (length possible_dates)))
 
 
-(defun statements3to5 (date) (equal '("May" "15") date))
+
+(defun statement3 (date)
+"Albert: I don't know when Cheryl's birthday is, but I know that Bernard does not know too."
+  (let ((possible_dates (tell (month date))))
+    (and (not (know possible_dates))
+         (= (length possible_dates) (length (remove-if #'(lambda (x)(<= (length(tell (cadr x))) 1)) possible_dates )))  )))
+
+(defun statement4 (date) (date))
+
+(defun statement5 (date) (date))
+
+(defun statements3to5 (date) (and (statement3 date) (statement4 date) (statement5 date)))
 
 (defun cheryls_bday (&optional(possible_dates dates))
   (remove-if-not #'statements3to5 possible_dates))
