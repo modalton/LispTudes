@@ -20,7 +20,8 @@
 "Albert: I don't know when Cheryl's birthday is, but I know that Bernard does not know too."
   (let ((possible_dates (tell (month date))))
     (and (not (know possible_dates))
-         (= (length possible_dates) (length (remove-if #'(lambda (x)(<= (length(tell (cadr x))) 1)) possible_dates )))  )))
+         (= (length possible_dates) (length (remove-if-not #'(lambda (x)(not (know (tell (cadr x))))) possible_dates )))
+         )))
 
 (defun statement4 (date)
   "Bernard: At first I don't know when Cheryl's birthday is, but I know now."
