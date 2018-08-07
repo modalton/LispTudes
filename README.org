@@ -30,3 +30,23 @@
     Albert: Then I also know when Cheryl's birthday is.
 
     So when is Cheryl's birthday?
+** Sicherman.lisp
+Huh. This is interesting. You know how in many games, such as craps or Monopoly, you roll two regular dice and add them up. Only the sum matters, not what either of the individual dice shows.
+
+Right.
+
+And some of those sums, like 8, can be made multiple ways, while 2 and 12 can only be made one way.
+
+Yeah. 8 can be made 5 ways, so it has a 5/36 probability of occurring.
+
+The interesting thing is that people have been playing dice games for 7,000 years. But it wasn't until 1977 that Colonel George Sicherman asked whether is is possible to have a pair of dice that are not regular dice—that is, they don't have (1, 2, 3, 4, 5, 6) on the six sides—but have the same distribution of sums as a regular pair—so the pair of dice would also have to have 5 ways of making 8, but it could be different ways; maybe 7+1 could be one way. Sicherman assumes that each side bears a positive integer.
+
+And what did he find?
+
+Wouldn't it be more fun to figure it out for ourselves?
+
+OK!
+
+How could we proceed?
+
+When in doubt, use brute force: we can write a program to enumerate the possibilities:
